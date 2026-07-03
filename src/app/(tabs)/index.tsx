@@ -1,12 +1,15 @@
-import { Text, View, StyleSheet, Image, FlatList } from "react-native";
+import { View, StyleSheet, SectionList } from "react-native";
 import {
   AssetField,
   MediaType,
   Query,
   requestPermissionsAsync,
 } from "expo-media-library";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { MediaAsset } from "../../types";
+import { groupAssetsIntoSections, AssetSection } from "../../utils/asset";
+import { PhotoRow } from "../../components/PhotoRow";
+import { SectionHeader } from "../../components/SectionHeader";
 
 export default function Photos() {
   const [assets, setAssets] = useState<MediaAsset[]>([]);
@@ -28,7 +31,7 @@ export default function Photos() {
           return {
             id: a.id,
             uri: await a.getUri(),
-            updatedAt: new Date((timestamp ? timestamp : 0) * 1000),
+            updatedAt: new Date(timestamp ? timestamp : 0),
           };
         }),
       );
@@ -39,17 +42,20 @@ export default function Photos() {
     queryAssets();
   }, []);
 
+  const sections: AssetSection[] = useMemo(() => {
+    return groupAssetsIntoSections(assets);
+  }, [assets]);
+
   return (
     <View style={styles.container}>
-      <Text>This is photos page</Text>
-
-      <FlatList
-        data={assets}
-        renderItem={({ item }) => (
-          <Image source={{ uri: item.uri }} style={styles.image} />
+      <SectionList
+        sections={sections}
+        keyExtractor={(item, index) => item[0]?.id || index.toString()}
+        renderItem={({ item }) => <PhotoRow rowAssets={item} />}
+        renderSectionHeader={({ section }) => (
+          <SectionHeader title={section.title} />
         )}
-        keyExtractor={(item) => item.id}
-        style={styles.listContainer}
+        contentContainerStyle={styles.listContainer}
       />
     </View>
   );
@@ -58,14 +64,9 @@ export default function Photos() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  image: {
-    width: 100,
-    height: 100,
+    backgroundColor: "#fff",
   },
   listContainer: {
-    flexDirection: "column",
+    paddingBottom: 24,
   },
 });
