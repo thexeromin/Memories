@@ -38,7 +38,6 @@ export default function PhotoDetailScreen() {
         </Pressable>
         <View style={styles.headerTitleContainer}>
           <Text style={styles.title}>{formattedDate}</Text>
-          <Text style={styles.subtitle}>San Francisco</Text>
         </View>
 
         <View style={styles.rightPlaceholder} />
@@ -46,7 +45,7 @@ export default function PhotoDetailScreen() {
 
       <View style={styles.imageContainer}>
         {uri ? (
-          <Image source={{ uri }} style={styles.image} resizeMode="cover" />
+          <Image source={{ uri }} style={styles.image} resizeMode="contain" />
         ) : null}
       </View>
 
@@ -54,13 +53,6 @@ export default function PhotoDetailScreen() {
         <Pressable style={styles.iconButton}>
           <MaterialDesignIcons
             name="export-variant"
-            size={26}
-            color={Colors.textMuted}
-          />
-        </Pressable>
-        <Pressable style={styles.iconButton}>
-          <MaterialDesignIcons
-            name="heart-outline"
             size={26}
             color={Colors.textMuted}
           />
@@ -107,11 +99,6 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: "500",
     color: Colors.text,
-  },
-  subtitle: {
-    fontSize: 13,
-    color: Colors.textMuted,
-    marginTop: 2,
   },
   rightPlaceholder: {
     width: 44,
