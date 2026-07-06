@@ -1,12 +1,6 @@
 import { View, StyleSheet, SectionList } from "react-native";
 import { useLocalSearchParams } from "expo-router";
-import {
-  AssetField,
-  MediaType,
-  Query,
-  Album,
-  requestPermissionsAsync,
-} from "expo-media-library";
+import { AssetField, MediaType, Query, Album } from "expo-media-library";
 import { useEffect, useState, useMemo } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { MediaAsset } from "@/types";
@@ -24,10 +18,6 @@ export default function AlbumPhotos() {
 
   useEffect(() => {
     const queryAssets = async () => {
-      const { status } = await requestPermissionsAsync();
-
-      if (status !== "granted") return;
-
       const album = await Album.get(album_title);
 
       if (!album) return;

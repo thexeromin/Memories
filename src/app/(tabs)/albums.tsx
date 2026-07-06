@@ -1,7 +1,7 @@
 import { useRouter } from "expo-router";
 import { View, StyleSheet, FlatList, ActivityIndicator } from "react-native";
 import { useEffect, useState } from "react";
-import { Album, Query, requestPermissionsAsync } from "expo-media-library";
+import { Album, Query } from "expo-media-library";
 import AlbumCard from "@/components/AlbumCard";
 import { Colors } from "@/theme/colors";
 
@@ -21,16 +21,13 @@ export default function Albums() {
   useEffect(() => {
     const fetchAlbums = async () => {
       try {
-        const { status } = await requestPermissionsAsync();
-        if (status !== "granted") return;
-
         const mediaAlbums = await Album.getAll();
 
         const albumsWithCovers = await Promise.all(
           mediaAlbums.map(async (album) => {
             const title = await album.getTitle();
 
-            // Try to get a cover image using Query
+            // Get a cover image using Query
             const coverAssets = await new Query().album(album).limit(1).exe();
             const coverAsset = coverAssets[0];
             const image = coverAsset ? await coverAsset.getUri() : null;

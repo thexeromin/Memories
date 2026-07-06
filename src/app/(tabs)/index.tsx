@@ -1,10 +1,5 @@
 import { View, StyleSheet, SectionList } from "react-native";
-import {
-  AssetField,
-  MediaType,
-  Query,
-  requestPermissionsAsync,
-} from "expo-media-library";
+import { AssetField, MediaType, Query } from "expo-media-library";
 import { useEffect, useState, useMemo } from "react";
 import { PhotoRow } from "@/components/PhotoRow";
 import { SectionHeader } from "@/components/SectionHeader";
@@ -17,10 +12,6 @@ export default function Photos() {
 
   useEffect(() => {
     const queryAssets = async () => {
-      const { status } = await requestPermissionsAsync();
-
-      if (status !== "granted") return;
-
       const queryResult = await new Query()
         .eq(AssetField.MEDIA_TYPE, MediaType.IMAGE)
         .orderBy(AssetField.MODIFICATION_TIME)
