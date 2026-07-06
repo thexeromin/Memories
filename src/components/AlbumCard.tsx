@@ -6,7 +6,7 @@ import {
   useWindowDimensions,
 } from "react-native";
 import { Image } from "expo-image";
-import { Colors } from "../theme/colors";
+import { Colors } from "@/theme/colors";
 
 interface AlbumCardProps {
   title: string;

@@ -1,4 +1,4 @@
-import { MediaAsset } from "../types";
+import { MediaAsset } from "@/types";
 import { formatDateGroup } from "./date";
 
 export interface AssetSection {

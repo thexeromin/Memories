@@ -6,10 +6,11 @@ import {
   requestPermissionsAsync,
 } from "expo-media-library";
 import { useEffect, useState, useMemo } from "react";
-import { MediaAsset } from "../../types";
-import { groupAssetsIntoSections, AssetSection } from "../../utils/asset";
-import { PhotoRow } from "../../components/PhotoRow";
-import { SectionHeader } from "../../components/SectionHeader";
+import { PhotoRow } from "@/components/PhotoRow";
+import { SectionHeader } from "@/components/SectionHeader";
+import { groupAssetsIntoSections, AssetSection } from "@/utils/asset";
+import { Colors } from "@/theme/colors";
+import { MediaAsset } from "@/types";
 
 export default function Photos() {
   const [assets, setAssets] = useState<MediaAsset[]>([]);
@@ -64,7 +65,7 @@ export default function Photos() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: Colors.white,
   },
   listContainer: {
     paddingBottom: 24,

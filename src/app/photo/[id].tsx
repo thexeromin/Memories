@@ -1,11 +1,11 @@
-import { View, Text, StyleSheet, Pressable, Image } from "react-native";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { View, StyleSheet, Pressable, Image } from "react-native";
+import { useLocalSearchParams } from "expo-router";
 import { MaterialDesignIcons } from "@react-native-vector-icons/material-design-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Colors } from "../../theme/colors";
+import ScreenHeader from "@/components/ScreenHeader";
+import { Colors } from "@/theme/colors";
 
 export default function PhotoDetailScreen() {
-  const router = useRouter();
   const { uri, date } = useLocalSearchParams<{
     id: string;
     uri: string;
@@ -22,26 +22,8 @@ export default function PhotoDetailScreen() {
     : "";
 
   return (
-    <View
-      style={[
-        styles.container,
-        { paddingTop: insets.top, paddingBottom: insets.bottom },
-      ]}
-    >
-      <View style={styles.header}>
-        <Pressable onPress={() => router.back()} style={styles.backButton}>
-          <MaterialDesignIcons
-            name="arrow-left"
-            size={28}
-            color={Colors.text}
-          />
-        </Pressable>
-        <View style={styles.headerTitleContainer}>
-          <Text style={styles.title}>{formattedDate}</Text>
-        </View>
-
-        <View style={styles.rightPlaceholder} />
-      </View>
+    <View style={[styles.container, { paddingBottom: insets.bottom }]}>
+      <ScreenHeader title={formattedDate} />
 
       <View style={styles.imageContainer}>
         {uri ? (
@@ -80,28 +62,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.background,
-  },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-  },
-  backButton: {
-    padding: 8,
-    marginLeft: -8,
-  },
-  headerTitleContainer: {
-    flex: 1,
-    alignItems: "center",
-  },
-  title: {
-    fontSize: 17,
-    fontWeight: "500",
-    color: Colors.text,
-  },
-  rightPlaceholder: {
-    width: 44,
   },
   imageContainer: {
     flex: 1,

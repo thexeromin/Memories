@@ -2,8 +2,8 @@ import { useRouter } from "expo-router";
 import { View, StyleSheet, FlatList, ActivityIndicator } from "react-native";
 import { useEffect, useState } from "react";
 import { Album, Query, requestPermissionsAsync } from "expo-media-library";
-import { Colors } from "../../theme/colors";
-import AlbumCard from "../../components/AlbumCard";
+import AlbumCard from "@/components/AlbumCard";
+import { Colors } from "@/theme/colors";
 
 interface AlbumData {
   id: string;
@@ -105,7 +105,7 @@ export default function Albums() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: Colors.white,
   },
   center: {
     alignItems: "center",

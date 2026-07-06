@@ -1,6 +1,6 @@
 import { View, Image, StyleSheet, Pressable } from "react-native";
 import { useRouter } from "expo-router";
-import { MediaAsset } from "../types";
+import { MediaAsset } from "@/types";
 
 interface PhotoRowProps {
   rowAssets: MediaAsset[];

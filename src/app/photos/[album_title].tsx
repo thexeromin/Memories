@@ -1,5 +1,5 @@
-import { View, StyleSheet, SectionList, Pressable, Text } from "react-native";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { View, StyleSheet, SectionList } from "react-native";
+import { useLocalSearchParams } from "expo-router";
 import {
   AssetField,
   MediaType,
@@ -9,15 +9,14 @@ import {
 } from "expo-media-library";
 import { useEffect, useState, useMemo } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { MaterialDesignIcons } from "@react-native-vector-icons/material-design-icons";
-import { MediaAsset } from "../../types";
-import { groupAssetsIntoSections, AssetSection } from "../../utils/asset";
-import { PhotoRow } from "../../components/PhotoRow";
-import { SectionHeader } from "../../components/SectionHeader";
-import { Colors } from "../../theme/colors";
+import { MediaAsset } from "@/types";
+import { groupAssetsIntoSections, AssetSection } from "@/utils/asset";
+import { PhotoRow } from "@/components/PhotoRow";
+import { SectionHeader } from "@/components/SectionHeader";
+import ScreenHeader from "@/components/ScreenHeader";
+import { Colors } from "@/theme/colors";
 
 export default function AlbumPhotos() {
-  const router = useRouter();
   const insets = useSafeAreaInsets();
   const { album_title } = useLocalSearchParams<{ album_title: string }>();
 
@@ -62,20 +61,7 @@ export default function AlbumPhotos() {
 
   return (
     <View style={[styles.container, { paddingBottom: insets.bottom }]}>
-      <View style={[styles.header, { paddingTop: insets.top }]}>
-        <Pressable onPress={() => router.back()} style={styles.backButton}>
-          <MaterialDesignIcons
-            name="arrow-left"
-            size={28}
-            color={Colors.text}
-          />
-        </Pressable>
-        <View style={styles.headerTitleContainer}>
-          <Text style={styles.title}>{album_title}</Text>
-        </View>
-
-        <View style={styles.rightPlaceholder} />
-      </View>
+      <ScreenHeader title={album_title} />
 
       <SectionList
         sections={sections}
@@ -94,29 +80,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.white,
-  },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    backgroundColor: Colors.background,
-  },
-  backButton: {
-    padding: 8,
-    marginLeft: -8,
-  },
-  headerTitleContainer: {
-    flex: 1,
-    alignItems: "center",
-  },
-  title: {
-    fontSize: 17,
-    fontWeight: "500",
-    color: Colors.text,
-  },
-  rightPlaceholder: {
-    width: 44,
   },
   listContainer: {
     paddingBottom: 24,
