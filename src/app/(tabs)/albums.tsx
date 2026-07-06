@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useRouter } from "expo-router";
 import { View, StyleSheet, FlatList, ActivityIndicator } from "react-native";
+import { useEffect, useState } from "react";
 import { Album, Query, requestPermissionsAsync } from "expo-media-library";
 import { Colors } from "../../theme/colors";
 import AlbumCard from "../../components/AlbumCard";
@@ -12,6 +13,8 @@ interface AlbumData {
 }
 
 export default function Albums() {
+  const router = useRouter();
+
   const [albums, setAlbums] = useState<AlbumData[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -83,6 +86,14 @@ export default function Albums() {
             image={
               item.image ||
               "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&q=80&w=600"
+            }
+            onPress={() =>
+              router.push({
+                pathname: "/photos/[album_title]",
+                params: {
+                  album_title: item.title,
+                },
+              })
             }
           />
         )}
