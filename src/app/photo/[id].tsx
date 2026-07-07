@@ -2,6 +2,7 @@ import { View, StyleSheet, Pressable, Image } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import { MaterialDesignIcons } from "@react-native-vector-icons/material-design-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { shareAsync } from "expo-sharing";
 import ScreenHeader from "@/components/ScreenHeader";
 import { Colors } from "@/theme/colors";
 
@@ -32,7 +33,7 @@ export default function PhotoDetailScreen() {
       </View>
 
       <View style={styles.footer}>
-        <Pressable style={styles.iconButton}>
+        <Pressable style={styles.iconButton} onPress={() => shareAsync(uri)}>
           <MaterialDesignIcons
             name="export-variant"
             size={26}
