@@ -2,8 +2,10 @@ import { useEffect } from "react";
 import * as MediaLibrary from "expo-media-library";
 
 export function useMediaLibraryPermission() {
-  // TODO: add granular permission
-  const [permission, requestPermission] = MediaLibrary.usePermissions();
+  const [permission, requestPermission] = MediaLibrary.usePermissions({
+    writeOnly: false,
+    granularPermissions: ["photo"],
+  });
 
   useEffect(() => {
     if (!permission?.granted && permission?.canAskAgain) {
