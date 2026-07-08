@@ -1,18 +1,33 @@
-import { View, StyleSheet, Pressable, Image } from "react-native";
+import {
+  Animated,
+  View,
+  StyleSheet,
+  Pressable,
+  Image,
+  TouchableWithoutFeedback,
+  Easing,
+} from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import { MaterialDesignIcons } from "@react-native-vector-icons/material-design-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { shareAsync } from "expo-sharing";
 import ScreenHeader from "@/components/ScreenHeader";
 import { Colors } from "@/theme/colors";
+import { Asset, type AssetInfo as AssetInfoType } from "expo-media-library";
+import AssetInfo from "@/components/AssetInfo";
+import { useState, useEffect, useRef } from "react";
 
 export default function PhotoDetailScreen() {
-  const { uri, date } = useLocalSearchParams<{
+  const { id, uri, date } = useLocalSearchParams<{
     id: string;
     uri: string;
     date: string;
   }>();
   const insets = useSafeAreaInsets();
+
+  const [info, setInfo] = useState<AssetInfoType>();
+  const opacity = useRef(new Animated.Value(0)).current;
+  const scale = useRef(new Animated.Value(0.8)).current;
 
   const formattedDate = date
     ? new Date(date).toLocaleDateString("en-US", {
@@ -22,15 +37,62 @@ export default function PhotoDetailScreen() {
       })
     : "";
 
+  useEffect(() => {
+    const getInfo = async () => {
+      const asset = new Asset(id);
+
+      const info = await asset.getInfo();
+      setInfo(info);
+    };
+
+    getInfo();
+  }, [id]);
+
+  const showInfoView = () => {
+    Animated.parallel([
+      Animated.timing(opacity, {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+      Animated.spring(scale, {
+        toValue: 1,
+        tension: 120,
+        friction: 7,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  };
+
+  const hideInfoView = () => {
+    Animated.parallel([
+      Animated.timing(opacity, {
+        toValue: 0,
+        duration: 250,
+        useNativeDriver: true,
+      }),
+      Animated.timing(scale, {
+        toValue: 0.8,
+        duration: 250,
+        easing: Easing.in(Easing.ease), // accelerate out, feels natural for exits
+        useNativeDriver: true,
+      }),
+    ]).start();
+  };
+
   return (
     <View style={[styles.container, { paddingBottom: insets.bottom }]}>
       <ScreenHeader title={formattedDate} />
 
-      <View style={styles.imageContainer}>
-        {uri ? (
-          <Image source={{ uri }} style={styles.image} resizeMode="contain" />
-        ) : null}
-      </View>
+      {info && <AssetInfo {...info} opacity={opacity} scale={scale} />}
+
+      <TouchableWithoutFeedback onPress={hideInfoView}>
+        <View style={styles.imageContainer}>
+          {uri ? (
+            <Image source={{ uri }} style={styles.image} resizeMode="contain" />
+          ) : null}
+        </View>
+      </TouchableWithoutFeedback>
 
       <View style={styles.footer}>
         <Pressable style={styles.iconButton} onPress={() => shareAsync(uri)}>
@@ -40,7 +102,7 @@ export default function PhotoDetailScreen() {
             color={Colors.textMuted}
           />
         </Pressable>
-        <Pressable style={styles.iconButton}>
+        <Pressable style={styles.iconButton} onPress={showInfoView}>
           <MaterialDesignIcons
             name="information-outline"
             size={26}
