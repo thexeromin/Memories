@@ -7,7 +7,7 @@ import {
   TouchableWithoutFeedback,
   Easing,
 } from "react-native";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { MaterialDesignIcons } from "@react-native-vector-icons/material-design-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { shareAsync } from "expo-sharing";
@@ -80,6 +80,15 @@ export default function PhotoDetailScreen() {
     ]).start();
   };
 
+  // TODO: handle errors & handle asset refresh
+  const handleAssetDelete = async () => {
+    const currentAsset = new Asset(id);
+    currentAsset
+      .delete()
+      .then(() => router.back())
+      .catch((e) => console.log(e));
+  };
+
   return (
     <View style={[styles.container, { paddingBottom: insets.bottom }]}>
       <ScreenHeader title={formattedDate} />
@@ -109,7 +118,7 @@ export default function PhotoDetailScreen() {
             color={Colors.textMuted}
           />
         </Pressable>
-        <Pressable style={styles.iconButton}>
+        <Pressable style={styles.iconButton} onPress={handleAssetDelete}>
           <MaterialDesignIcons
             name="trash-can-outline"
             size={26}
