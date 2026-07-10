@@ -1,9 +1,7 @@
 import { View, StyleSheet, FlatList, Text, Dimensions } from "react-native";
-import { useEffect, useState } from "react";
-import { AssetField, MediaType, Query } from "expo-media-library";
 import { Image } from "expo-image";
 import { Colors } from "@/theme/colors";
-import { MediaAsset } from "@/types";
+import { useAssets } from "@/hooks";
 
 const { width } = Dimensions.get("window");
 const COLUMN_COUNT = 3;
@@ -14,33 +12,7 @@ const ITEM_SIZE =
   COLUMN_COUNT;
 
 export default function SearchAssetGrid() {
-  const [assets, setAssets] = useState<MediaAsset[]>([]);
-
-  // TODO: extract this out
-  useEffect(() => {
-    const queryAssets = async () => {
-      const queryResult = await new Query()
-        .eq(AssetField.MEDIA_TYPE, MediaType.IMAGE)
-        .orderBy(AssetField.MODIFICATION_TIME)
-        .limit(15)
-        .exe();
-
-      const processedAssets = await Promise.all(
-        queryResult.map(async (a) => {
-          const timestamp = await a.getModificationTime();
-          return {
-            id: a.id,
-            uri: await a.getUri(),
-            updatedAt: new Date(timestamp ? timestamp : 0),
-          };
-        }),
-      );
-
-      setAssets(processedAssets);
-    };
-
-    queryAssets();
-  }, []);
+  const assets = useAssets(15);
 
   return (
     <View style={styles.container}>

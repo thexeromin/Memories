@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { useMediaLibraryPermission } from "@/hooks/useMediaLibraryPermission";
+import { useMediaLibraryPermission } from "@/hooks";
 import { PermissionRequiredScreen } from "./PermissionRequiredScreen";
 
 interface Props {
