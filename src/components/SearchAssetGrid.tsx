@@ -1,6 +1,9 @@
 import { View, StyleSheet, FlatList, Text, Dimensions } from "react-native";
+import { useEffect, useState } from "react";
+import { AssetField, MediaType, Query } from "expo-media-library";
 import { Image } from "expo-image";
 import { Colors } from "@/theme/colors";
+import { MediaAsset } from "@/types";
 
 const { width } = Dimensions.get("window");
 const COLUMN_COUNT = 3;
@@ -10,19 +13,40 @@ const ITEM_SIZE =
   (width - PADDING_HORIZONTAL * 2 - SPACING * (COLUMN_COUNT - 1)) /
   COLUMN_COUNT;
 
-// TODO: remove this
-// Mock data to visualize the grid
-const MOCK_ASSETS = Array.from({ length: 30 }).map((_, i) => ({
-  id: `mock-${i}`,
-  uri: `https://picsum.photos/seed/${i + 100}/300/300`,
-}));
-
 export default function SearchAssetGrid() {
+  const [assets, setAssets] = useState<MediaAsset[]>([]);
+
+  // TODO: extract this out
+  useEffect(() => {
+    const queryAssets = async () => {
+      const queryResult = await new Query()
+        .eq(AssetField.MEDIA_TYPE, MediaType.IMAGE)
+        .orderBy(AssetField.MODIFICATION_TIME)
+        .limit(15)
+        .exe();
+
+      const processedAssets = await Promise.all(
+        queryResult.map(async (a) => {
+          const timestamp = await a.getModificationTime();
+          return {
+            id: a.id,
+            uri: await a.getUri(),
+            updatedAt: new Date(timestamp ? timestamp : 0),
+          };
+        }),
+      );
+
+      setAssets(processedAssets);
+    };
+
+    queryAssets();
+  }, []);
+
   return (
     <View style={styles.container}>
       <Text style={styles.headerTitle}>Recent</Text>
       <FlatList
-        data={MOCK_ASSETS}
+        data={assets}
         keyExtractor={(item) => item.id}
         numColumns={COLUMN_COUNT}
         showsVerticalScrollIndicator={false}
