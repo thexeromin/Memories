@@ -41,15 +41,6 @@ export default function TabLayout() {
           ),
         }}
       />
-      <Tabs.Screen
-        name="search"
-        options={{
-          title: "Search",
-          tabBarIcon: ({ color }) => (
-            <MaterialDesignIcons size={28} name="magnify" color={color} />
-          ),
-        }}
-      />
     </Tabs>
   );
 }
