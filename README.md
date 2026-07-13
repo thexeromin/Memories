@@ -7,7 +7,6 @@ A simple gallery app built for learning purposes. This project serves as a hands
 <p align="center">
   <img src="./assets/screenshots/index.jpg" width="200" />
   <img src="./assets/screenshots/albums.jpg" width="200" />
-  <img src="./assets/screenshots/search.jpg" width="200" />
 </p>
 
 ## Project Goals
