@@ -9,8 +9,9 @@ A simple gallery app built for learning purposes. This project serves as a hands
   <img src="./assets/screenshots/albums.jpg" width="200" />
 </p>
 
-## Features (Planned)
+## Features
 
 - View a grid of images.
 - Full-screen image viewing.
 - Basic image organization and management.
+- Image share, delete, info
